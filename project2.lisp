@@ -1,3 +1,6 @@
+(defvar *x* 1)
+(defvar *y* 2)
+(defvar *z* 3)
 (defun geti ()
   (setq const_int (- (random 19) 9)))
 
@@ -29,7 +32,20 @@
   (dotimes (n (+  (random 2) 2))
     (setq expr (append expr (list (getk)))))
     (return-from make_expr expr))
-    
+
+(defun calc (cexpr)
+  (if (every #'not-list cexpr)
+      (progn
+       (apply (car cexpr) (cdr cexpr))
+       (print "did it")
+       (return-from calc (apply (car cexpr) (cdr cexpr)))))
+  (print "else")
+  (print "after"))  
+
+(defun tree-walk (fn tree)
+  (cond ((atom tree) (funcall fn tree))
+	(t (tree-walk fn (first tree))
+	   (tree-walk fn (rest tree)))))
 
 (defun cell-count (rt)
   "Return the number of nodes/cells in the tree. Skip non-cells."
@@ -38,3 +54,6 @@
     ((not (listp rt)) 0)
     (t (let ((cc (length rt)))
          (+ cc (apply #'+ (mapcar #'cell-count rt)))))))
+(defun not-list (mlist)
+"return true if not a list"
+ (not (listp mlist)))
