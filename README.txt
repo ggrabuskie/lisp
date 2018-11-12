@@ -13,7 +13,6 @@ expressions are more fit than the last.
 Files List
 - project2.lisp
 - README.txt
-- fitnessResults
 
 Installation/Run
 - compile in a common lisp environment
