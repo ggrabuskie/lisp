@@ -1,6 +1,25 @@
 (defvar X 1)
 (defvar Y 2)
 (defvar Z 3)
+"prevent warnings for undefined variables"
+(defvar CONST_INT)
+(defvar RAND_NUM)
+(defvar V)
+(defvar VK)
+(defvar OP)
+(defvar EXPR)
+(defvar INSERT)
+(defvar RNTH)
+(defvar SUBTHISOP)
+(defvar SUBTHISV)
+(defvar TVALS)
+(defvar KID)
+(defvar OPS)
+(defvar BEST-OF-GENS)
+(defvar POPULATION)
+(defvar J)
+(defvar N)
+
 
 (defun geti ()
   "Get a random integer"
@@ -32,8 +51,8 @@
 
 (defun getRanN (expr)
   "Get a random number for n"
-  (setq n (+ (random (cell-count expr)) 1))
-  n)
+  (setq j (+ (random (cell-count expr)) 1))
+  j)
 
 (defun make_expr()
   "Call this function to create a random expression"
@@ -71,7 +90,6 @@
       ((= 1 rnth)		;; Found the correct position
        (cond
 	 ((listp (car expr))
-	  (print rnth)
 	  (mutate (+ 1 rnth) expr))
 	 ((equal 'X (car expr))
 	  (rplaca expr subThisv))
@@ -106,45 +124,6 @@
     ((not (listp rt)) 0)
     (t (let ((cc (length rt)))
          (+ cc (apply #'+ (mapcar #'cell-count rt)))))))
-
-(defun tree-nth-cell (rnth rtree)
-  "Return the DFS N-th cell in the given tree: 1-based"
-  (let ((size (cell-count rtree)))
-    ;; (print (list :dbga rnth size (car rtree)))
-    (cond
-      ((not(integerp  rnth)) nil)
-      ((not (listp rtree)) nil)	;; Not a tree?
-      ((null rtree) nil)	;; No tree elts?
-      ((= 1 rnth) rtree)	;; 1st elt of list is the tree, itself
-      ((>= 0 rnth) nil)	;; Nth 0 or negative?
-      ((> rnth size) nil)	;; N-th beyond tree's end?
-      (t	;; elt is in the car subtree or cdr "subtree"
-       (setq rnth (1- rnth))	;; Account: elt isn't the current (car+cdr's) node
-       (let ((size1 (cell-count (car rtree))))
-	 ;; (print (list :dbgb rnth size1 (car rtree)))
-	 (cond
-	   ((>= 0 size1) (tree-nth-cell ;; No car subtree
-			  rnth
-			  (cdr rtree)))	;; Find elt in the cdr subtree
-	   ((<= rnth size1) (tree-nth-cell	;; Elt is in car subtree
-			     rnth
-			     (car rtree)))	;; Find elt in the car subtree
-	   (t (tree-nth-cell	;; Elt is in the cdr subtree
-	       (- rnth size1)	;; Accounting for skipping car subtree
-	       (cdr rtree)))))))))	;; skip car subtree
-
-(defun random-tree-cell (rtree)
-  "Return random cell in the tree, but not the whole tree."
-  (let* ((size (cell-count rtree))
-	 (rx (1+ (random (1- size))))	;; Avoid 1st cell (the whole tree)
-	 (nth (1+ rx))	;; Incr because our fcn is 1-based, not 0-based
-	 (spot (tree-nth-cell nth rtree)))
-    ;; (print (list :dbg size nth spot))
-    spot ))
-(defun tree-walk (fn tree)
-  (cond ((atom tree) (funcall fn tree))
-	(t (tree-walk fn (first tree))
-	   (tree-walk fn (rest tree)))))
 
 (defun not-list (mlist)
   "return true if not a list"
@@ -202,21 +181,8 @@
       (setq bestl (append bestl (list newbest)))))
 
 
-(defun crossed-kid (expr1 expr2)
-  (setf kid (make-array '(3)))
-  (setf ops (make-array '(2)))
-  (setf (aref ops 0) (aref expr1 0))
-  (setf (aref ops 1) (aref expr2 0))
-  (setf (aref kid 0) (aref ops (random 2)))
-  (setf (aref kid 1) (aref expr1 (+ 1 (random 2))))
-  (setf (aref kid 2) (aref expr2 (+ 1 (random 2))))
-  (setf kid kid)
-  )
-
 (defun fill-population (expr gen-size)
-  (print expr)
   (dotimes (n (- gen-size (length expr)))
-    (print n)
     (setq expr (append expr (list (make_expr)))))
   (return-from fill-population expr))
 
