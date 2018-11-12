@@ -1,37 +1,4 @@
-(defvar *rvars* (list 1 2 3))
-
-(defun geti ()
-  (setq const_int (- (random 19) 9)))
-
-(defun getv ()
-  (setq rand_num (random 3))
-  (cond
-    ((= rand_num 0) (setq v 'x))
-    ((= rand_num 1) (setq v 'y))
-    ((= rand_num 2) (setq v 'z))))
-
-(defun getk ()
-  (setq rand_num (random 3))
-  (cond
-    ((= rand_num 0) (setq vk (geti)))
-    ((= rand_num 1) (setq vk (getv)))
-    ((= rand_num 2) (setq vk (make_expr)))))
-
-(defun geto ()
-  (setq rand_num (random 3))
-  (cond
-    ((= rand_num 0) (setq op '*))
-    ((= rand_num 1) (setq op '+))
-    ((= rand_num 2) (setq op '-))))
-
-(defun make_expr ()
-  (Setq expr (list (geto)))
-  (print expr)
-  (dotimes (n (+  (random 2) 2))
-    (setq expr (append expr (list (getk)))))
-    (return-from make_expr expr))
-
-(defun calc (cexpr)
+(defun dontcalc (cexpr)
   (if (every #'not-list cexpr)
       (progn
        (apply (car cexpr) (cdr cexpr))
@@ -57,18 +24,14 @@
 "return true if not a list"
   (not (listp mlist)))
 
-(defun evaluate(expr)
-  "Evaluate the expression"
-  (setq X *x*)
-  (setq Y *y*)
-  (setq Z *z*)
-  (setq result (eval expr)))
+
 
 (defun calc (rvars rexpr)
   (let ((X (car rvars))
         (Y (nth 1 rvars))
         (Z (nth 2 rvars)))
     (eval rexpr)))
+
 (defun calc_fitness (rexpr)
   (setq tvals (list
                (list 0 -2 1 -16)
@@ -83,4 +46,26 @@
                (list 1 0 2 2)))
   (reduce '+ (loop for i in tvals
         for sl = (abs(-  (calc i rexpr) (nth 3 i)))
-        collect sl)))
+                   collect sl)))
+
+
+(defun get_population (size)
+  (loop for i from 1 to size
+        for expr = (make_expr)
+        collect expr))
+
+(defun collect-fits (population)
+  (loop for i in population
+        for fits = (calc_fitness i)
+        collect fits))
+
+(defun smallest (l)
+  "from https://www.programcreek.com/2010/10/lisp-code-find-minimum-element-in-a-list/"
+  (apply 'min l))
+
+(defun get_best_fit (population)
+  (smallest (collect-fits population)))
+
+(defun main ()
+  (setq population (get_population 50)))
+
