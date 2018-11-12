@@ -196,6 +196,19 @@
       (setq bestl (list newbest))
       (setq bestl (append bestl (list newbest)))))
 
+
+(defun crossed-kid (expr1 expr2)
+  (setf kid (make-array '(3)))
+  (setf ops (make-array '(2)))
+  (setf (aref ops 0) (aref expr1 0))
+  (setf (aref ops 1) (aref expr2 0))
+  (setf (aref kid 0) (aref ops (random 2)))
+  (setf (aref kid 1) (aref expr1 (+ 1 (random 2))))
+  (setf (aref kid 2) (aref expr2 (+ 1 (random 2))))
+  (setf kid kid)
+  )
+
+
 (defun main (max-gens gen-size)
   (setq best-of-gens (list(list)))
   (dotimes (n max-gens)
