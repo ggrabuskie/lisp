@@ -60,8 +60,8 @@
 	"Adds 2nd layer to expression in a random spot"
 	(setq insert (first_layer))
 	(setq n (getRanN expr))
-	(if (= 1 n)
-		(+ n 1))
+	(cond ((= n 1)
+		(setq n (+ 1 n))))
 	(loop for i from 1 for j in expr collect (if (= i n) insert j)))
 
 (defun mutation (expr)
