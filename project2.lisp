@@ -65,7 +65,14 @@
 
 (defun get_best_fit (population)
   (smallest (collect-fits population)))
+(defun add-best (bestl newbest)
+  (if (not bestl)
+      (setq bestl (list newbest))
+      (setq bestl (append bestl (list newbest)))))
 
-(defun main ()
+(defun main (max-gens)
+  (setq best-of-gen (list))
+  loop for i from 0 to max-gens
+  
   (setq population (get_population 50)))
 
