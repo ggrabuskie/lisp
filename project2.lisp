@@ -1,6 +1,6 @@
-(defvar *xvalue* 1)
-(defvar *yvalue* 2)
-(defvar *zvalue* 3)
+(defvar X 1)
+(defvar Y 2)
+(defvar Z 3)
 
 (defun geti ()
   "Get a random integer"
@@ -51,8 +51,8 @@
   "Adds 2nd layer to expression in a random spot"
   (setq insert (first_layer))
   (setq n (getRanN expr))
-  (if (= 1 n)
-      (+ n 1))
+  (cond ((= n 1)
+	 (setq n (+ 1 n))))
   (loop for i from 1 for j in expr collect (if (= i n) insert j)))
 
 (defun mutation (expr)
@@ -180,7 +180,7 @@
 
 (defun collect-fits (population)
   (loop for i in population
-        for fits = (calc_fitness i)
+        for fits = (calc-fitness i)
         collect fits))
 
 (defun smallest (l)
@@ -199,6 +199,7 @@
 (defun main (max-gens gen-size)
   (setq best-of-gens (list(list)))
   (dotimes (n max-gens)
-    (setq population (get_population gen-size))
-    (setq best-of-gens (add-best best-of-gens (get-best-fit population)))))
+    (setq population (get-population gen-size))
+    (setq best-of-gens (add-best best-of-gens (get-best-fit population))))
+  (return-from main best-of-gens))
 
