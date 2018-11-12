@@ -177,6 +177,11 @@
   (loop for i from 1 to size
         for expr = (make_expr)
         collect expr))
+(defun mutate-population (population)
+  (dotimes (n (length population))
+    (mutation (nth n population)))
+  (return-from mutate-population population))
+    
 
 (defun collect-fits (population)
   (loop for i in population
@@ -208,11 +213,19 @@
   (setf kid kid)
   )
 
+(defun fill-population (expr gen-size)
+  (print expr)
+  (dotimes (n (- gen-size (length expr)))
+    (print n)
+    (setq expr (append expr (list (make_expr)))))
+  (return-from fill-population expr))
+
 
 (defun main (max-gens gen-size)
   (setq best-of-gens (list(list)))
+  (setq population (get-population gen-size))
   (dotimes (n max-gens)
-    (setq population (get-population gen-size))
-    (setq best-of-gens (add-best best-of-gens (get-best-fit population))))
+    (setq best-of-gens (add-best best-of-gens (get-best-fit population)))
+    (setq population (mutate-population population)))
   (return-from main best-of-gens))
 
