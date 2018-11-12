@@ -20,4 +20,10 @@ Installation/Run
 
 Missing Features
 We were not able to implement the crossover function. Because of this, the population does not increase in fitness as much as it should.
-Instead, we rollover the best fit expressions and mutate them, which produces little change in fitness scores. 
+Instead, we rollover the best fit expressions and mutate them, which produces little change in fitness scores.
+We were getting warnings for setq'ing undefined variables so we added a list of global variable declarations to meet the requirement of "“compiling” and executing with no errors or warnings".
+
+Extra Features
+This project is extremely compartmentalized, meaning that all of the functions are discrete with very high reusability
+and clarity of design.
+
