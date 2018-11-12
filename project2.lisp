@@ -1,6 +1,6 @@
-(defvar x 1)
-(defvar y 2)
-(defvar z 3)
+(defvar *x* 1)
+(defvar *y* 2)
+(defvar *z* 3)
 
 (defun geti ()
   (setq const_int (- (random 19) 9)))
@@ -61,7 +61,7 @@
 
 (defun evaluate(expr)
   "Evaluate the expression"
-  (setq X xvalue)
-  (setq Y yvalue)
-  (setq Z zvalue)
+  (setq X *x*)
+  (setq Y *y*)
+  (setq Z *z*)
   (setq result (eval expr)))
