@@ -1,6 +1,4 @@
-(defvar *x* 1)
-(defvar *y* 2)
-(defvar *z* 3)
+(defvar *rvars* (list 1 2 3))
 
 (defun geti ()
   (setq const_int (- (random 19) 9)))
@@ -65,3 +63,24 @@
   (setq Y *y*)
   (setq Z *z*)
   (setq result (eval expr)))
+
+(defun calc (rvars rexpr)
+  (let ((X (car rvars))
+        (Y (nth 1 rvars))
+        (Z (nth 2 rvars)))
+    (eval rexpr)))
+(defun calc_fitness (rexpr)
+  (setq tvals (list
+               (list 0 -2 1 -16)
+               (list -4 -5 -3 58)
+               (list 9 8 -6 72)
+               (list 9 -7 5 113)
+               (list -8 7 3 150)
+               (list 5 4 -5 20)
+               (list 6 -4 6 41)
+               (list -5 3 -7 -24)
+               (list -6 -5 9 -18)
+               (list 1 0 2 2)))
+  (reduce '+ (loop for i in tvals
+        for sl = (abs(-  (calc i rexpr) (nth 3 i)))
+        collect sl)))
